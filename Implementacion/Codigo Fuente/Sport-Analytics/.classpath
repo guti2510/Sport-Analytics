@@ -18,7 +18,8 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Alex/Documents/opencv/build/java/x64"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alex/Documents/GitHub/Sport-Analytics/Sport-Analytics/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Alex/Documents/EclipseProjects/Sport-Analytics - POC/Sport-Analytics/lib/servlet-api.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="C:/Users/Alex/Documents/EclipseProjects/Sport-Analytics - POC/Sport-Analytics/lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
