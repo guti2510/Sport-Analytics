@@ -1,4 +1,11 @@
 package SegmentacionTemporal;
+/**
+ * @author Grupo 5 - Aseguramiento de la Calidad del Software
+ * 			-Juan Jose Gutierrez J
+ * 			-Alexander Sanchez B
+ * 			-Katerine Molina
+ *
+ */
 
 import java.util.ArrayList;
 

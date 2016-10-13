@@ -1,5 +1,11 @@
 package SegmentacionTemporal;
-
+/**
+ * @author Grupo 5 - Aseguramiento de la Calidad del Software
+ * 			-Juan Jose Gutierrez J
+ * 			-Alexander Sanchez B
+ * 			-Katerine Molina
+ *
+ */
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,6 +18,14 @@ import org.json.simple.parser.ParseException;
 
 public class LecturaArchivo {
 	
+	/**
+	 * Lee un archivo tipo .json el cual es el groundtruth, y guarda la informacion de este archivo en una
+	 * lista de clases de tipo InfoFrame.
+	 * 
+	 * @param  	 pNombreGroud - Un string con el nombre del archivo de groundtruth
+	 * @return   ListaFrames - Una lista de clases de tipo InfoFrame con los datos del groundtruth
+	 * 
+	*/
 	public ArrayList<InfoFrame> leerArchivo(String pNombreGroud) throws IOException, ParseException{
 		
 		ArrayList<InfoFrame> ListaFrames = new ArrayList<InfoFrame>();

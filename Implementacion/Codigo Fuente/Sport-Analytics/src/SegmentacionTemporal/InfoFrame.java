@@ -1,4 +1,11 @@
 package SegmentacionTemporal;
+/**
+ * @author Grupo 5 - Aseguramiento de la Calidad del Software
+ * 			-Juan Jose Gutierrez J
+ * 			-Alexander Sanchez B
+ * 			-Katerine Molina
+ *
+ */
 
 public class InfoFrame {
 
@@ -6,6 +13,7 @@ public class InfoFrame {
 	private int frameFinal;
 	private String tipoEscena;
 	
+	/*------- Constructors ----- */
 	public InfoFrame (){}
 	
 	public InfoFrame (int pFrameInicial, int pFramefinal, String pTipoEscena){
@@ -14,6 +22,7 @@ public class InfoFrame {
 		this.tipoEscena = pTipoEscena;
 	}
 	
+	/*------ Getters and Setters  ------ */
 	public int getFrameInicial() {
 		return frameInicial;
 	}

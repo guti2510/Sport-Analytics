@@ -8,8 +8,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.highgui.VideoCapture;
 
+/**
+ * @author Grupo 5 - Aseguramiento de la Calidad del Software
+ * 			-Juan Jose Gutierrez J
+ * 			-Alexander Sanchez B
+ * 			-Katerine Molina
+ *
+ */
 public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 	
 	VideoEditor openCvEdit;
@@ -22,6 +28,14 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 		rawFrame = new ArrayList<>();
 	}
 	
+	/**
+	 * Toma una lista de histogramas y calcula la desimilitud entre estos, y retorna
+	 * un arreglo de numeros double con los resultados  
+	 *
+	 * @param  		listaHist - Una lista de histogramas
+	 * @return      listaDistancia - Una lista con las comparaciones de similitud 
+	 * 								 de histogramas
+	*/
 	public ArrayList<Double> calcularSimilitudHist(ArrayList<Mat> listaHist){
 		double media1, media2, alpha, beta, distancia;
 		long tamanoTotal = 1;
@@ -41,22 +55,16 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 			media2 = Core.mean(listaHist.get(cont)).val[0];
 							
 			alpha =  1 / (Math.sqrt( media1 * media2 * Math.pow(tamanoTotal, 2)) ); 
-			
-			//System.out.println("a: "+ alpha);
+
 
 			/* Calcula beta*/
-		    
 			for(int fila = 0; fila < tamanoTotal; fila++){
 				beta = beta + Math.sqrt(listaHist.get(cont - 1).get(fila, 0)[0] * listaHist.get(cont).get(fila, 0)[0]);
 			}
 			
-			//System.out.println("b: " + beta);
 			
-			/*	Calcula la distancia	*/
-						
+			/*	Calcula la distancia	*/		
 			distancia = 1 / Math.sqrt(1 - alpha * beta);
-			
-			//System.out.println("Manual: " + distancia + " - OpenCV: "+ Imgproc.compareHist(listaHist.get(cont - 1), listaHist.get(cont), Imgproc.CV_COMP_BHATTACHARYYA));
 			
 			listaDistancia.add(distancia);
 		}
@@ -65,6 +73,13 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 		    	    
 	}
 	
+	/**
+	 * Calcula la media de la lista con los calculos de dedisimilitud, y retorna
+	 * un numero double con el calculo de la media.
+	 *
+	 * @param  		pListaBhata - Una lista de numeros double (Calculos de desimilitud)
+	 * @return      media - Un numero double con el calculo de la media
+	*/
 	public double calcularMedia(ArrayList<Double> pListaBhata){
 		double media = 0.0;
 		
@@ -75,6 +90,14 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 		return media / pListaBhata.size();
 	}
 	
+	/**
+	 * Calcula la desviacion estandar de la lista con los calculos de dedisimilitud, y retorna
+	 * un numero double con el calculo de la desviacion estandar.
+	 *
+	 * @param  	 pListaBhata - Una lista de numeros double (Calculos de desimilitud)
+	 * @param  	 pMedia - Un numero double (Calculo de la media)
+	 * @return   Un numero double con el calculo de la desviacion estandar
+	*/
 	public double calcularDesviacion(ArrayList<Double> pListaBhata, double pMedia){
 		double sumatoria = 0.0;
 		
@@ -86,8 +109,15 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 		
 	}
 	
+	/**
+	 * Determina segun una lista de arrays(Calculos de desimilitud) si se dan cortes o no cortes
+	 * en un determinado frame del video.
+	 * 
+	 * @param  	 pListaBhata - Una lista de numeros double (Calculos de desimilitud)
+	 * @return   NA
+	*/
 	public void clasificarFrames(ArrayList<Double> pListaBhata){
-		double media = 0.0, desviacion = 0.0, sumatoria = 0.0;
+		double media = 0.0, desviacion = 0.0;
 		this.listaFrame.clear();
 		
 		media = calcularMedia(pListaBhata);
@@ -114,19 +144,22 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 				
 				iniFrame = indice;
 				estaCorte = false;
-				//System.out.println(info.getFrameInicial() + " - " + info.getFrameFinal() + " estado: " + info.getTipoEscena());
 				
 			}
 		}
 		
-		/*for(int indice = 0; indice < frameCortes.size(); indice++){
-			System.out.println(frameCortes.get(indice).getFrameInicial() + " - " + frameCortes.get(indice).getFrameFinal() + " estado: " + frameCortes.get(indice).getTipoEscena());
-		}*/
 		
 		System.out.println("media: " + media + " desviacion: " + desviacion);		
 		
 	}
 	
+	/**
+	 * Obtiene los frames de un video y hace las funcionalidades de transformar los colores 
+	 * RGB a HSV, extraer la capa H, calcular los histogramas, y normalizar los histogramas, y
+	 * va creando una lista con los histogramas normalizados.
+	 * 
+	 * @param  	 nombrevideo - Un string con el nombre del video
+	*/
 	public void detectarCortes(String nombrevideo){
 		
 		this.rawFrame = openCvEdit.obtenerFrames(nombrevideo);
@@ -163,6 +196,15 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
     	
 	}
 	
+	/**
+	 * Busca en una lista de frames detectados en el groundtruth, cuales poseen la
+	 * escena de "Cut" y retorna una lista con numeros double de los frames que
+	 * son corte.
+	 * 
+	 * @param  	 pLista - Una lista de clases de tipo InfoFrame, que contienen la informacion
+	 * 					  de los frames detectados en el groundtruth
+	 * @return   listaindices - Una lista de numeros double, que son los frames que son cortes
+	*/
 	public ArrayList<Double> buscarCortes(ArrayList<InfoFrame> pLista){
 		ArrayList<Double> listaindices = new ArrayList<Double>();
 		
@@ -175,6 +217,14 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 		return listaindices;
 	}
 	
+	/**
+	 * Realiza los calculos de los falsos positivos y negativos encontrados en la deteccion de
+	 * cortes del video.
+	 * 
+	 * @param  	 pLista - Una lista de clases de tipo InfoFrame, que contienen la informacion
+	 * 					  de los frames detectados en el groundtruth
+	 * @return   reporte - Una clase de tipo InfoReporte
+	*/
 	public InfoReporte validarResultado(ArrayList<InfoFrame> pLista){
 		
 		ArrayList<Double> listaIndices = buscarCortes(pLista);
@@ -201,6 +251,12 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 		return reporte;
 	}
 	
+	/**
+	 * Genera un archivo de tipo .json de groundtruth donde se especifque en que cuadros hay un corte,
+	 * segun el analisis realizado al video.
+	 * 
+	 * @return   El retorno es null, ya que solo crear el archivo con la informacion.
+	*/
 	public String generarArchivo(){
 		   
 		  try {
@@ -242,6 +298,15 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 		  	return null;
 		 }
 	
+	
+	/**
+	 * Genera un archivo tipo .json con el reporte con los falsos positivos y negativos encontrados 
+	 * en la deteccion de cortes del video.
+	 * 
+	 * @param  	 pReporte - Una clase de tipo InfoReporte que contiene la informacion de las detecciones
+	 * 						realizadas al video
+	 * @return   String - Una string con el nombre del archivo generado
+	*/
 	public String generarReporte(InfoReporte pReporte){
 		if(pReporte == null)
 			return null;
