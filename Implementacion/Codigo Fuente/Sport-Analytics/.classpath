@@ -13,13 +13,22 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OpenCv">
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OpenCv"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/commons-fileupload-1.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.5-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.5.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/opencv-2413.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Alex/Documents/opencv/build/java/x64"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Katerine/Documents/openCV/opencv/build/java/x64"/>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alex/Documents/EclipseProjects/Sport-Analytics - POC/Sport-Analytics/lib/servlet-api.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="C:/Users/Alex/Documents/EclipseProjects/Sport-Analytics - POC/Sport-Analytics/lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/org.json.simple-0.3-incubating.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

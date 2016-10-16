@@ -1,5 +1,6 @@
 package SegmentacionTemporal;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+
 
 /**
  * @author Grupo 5 - Aseguramiento de la Calidad del Software
@@ -256,12 +258,13 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 	 * segun el analisis realizado al video.
 	 * 
 	 * @return   El retorno es null, ya que solo crear el archivo con la informacion.
+	 * @throws Exception 
 	*/
 	public String generarArchivo(){
 		   
 		  try {
 
-		    FileWriter file = new FileWriter("CortesDetectados.json");
+		    FileWriter file = new FileWriter(new File("F:\\Cursos\\II Semestre 2016\\Aseguramiento de software\\Proyectos\\Sport-Analytics\\Implementacion\\Codigo Fuente\\Sport-Analytics\\WebContent\\cortesGenerados","CortesDetectados.json"));
 		     
 		    JSONArray lista = new JSONArray();
 		     
@@ -292,7 +295,7 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 		    return objetoprincipal.toJSONString();
 		    
 		    } catch (IOException e) {
-		    	//manejar error
+		    	System.out.println(e.getMessage());
 		    }
 		  
 		  	return null;

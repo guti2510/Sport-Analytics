@@ -2,6 +2,7 @@
     <wb-module deploy-name="Sport-Analytics">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/" source-path="/lib"/>
         <property name="context-root" value="Sport-Analytics"/>
         <property name="java-output-path" value="/Sport-Analytics/build/classes"/>
     </wb-module>
