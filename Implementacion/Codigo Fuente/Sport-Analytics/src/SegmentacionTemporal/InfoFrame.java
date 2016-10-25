@@ -23,6 +23,7 @@ public class InfoFrame {
 	}
 	
 	/*------ Getters and Setters  ------ */
+	
 	public int getFrameInicial() {
 		return frameInicial;
 	}
