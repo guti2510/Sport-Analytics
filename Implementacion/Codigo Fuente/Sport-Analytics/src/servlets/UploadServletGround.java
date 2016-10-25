@@ -27,7 +27,7 @@ import SegmentacionTemporal.ControladorSegmentador;
  * 			-Juan Jose Gutierrez J
  * 			-Alexander Sanchez B
  * 			-Katerine Molina
- *
+ *  @version 2.0.0
  */
  
 @WebServlet("/UploadServletGround")
@@ -47,10 +47,13 @@ public class UploadServletGround extends HttpServlet {
 	private String fileName;
 	//static{System.loadLibrary("C:\\Users\\Katerine\\Documents\\openCV\\opencv\\build\\java\\x64\\opencv_java2413.dll");}
     /**
-     * handles file upload
+     * Subir un GroundTruth del cliente y compararlo con un video en específico
+     * @param request HttpServletRequest 
+     * @param response HttpServletResponse
+     * @throws ServletException 
      */
     protected void doPost(HttpServletRequest request,
-            HttpServletResponse response) {
+            HttpServletResponse response) throws ServletException {
     	
     	// Lectura de la librería dll de OpenCV 
     	System.load("C:\\Users\\Katerine\\Documents\\openCV\\opencv\\build\\java\\x64\\opencv_java2413.dll");
@@ -96,16 +99,16 @@ public class UploadServletGround extends HttpServlet {
 			PrintWriter out = response.getWriter();
 		    out.append(resultado);
 		    
-		} catch (IOException | ServletException | ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			throw new ServletException(e.getMessage());
 		}
         
     }
  
     /**
-     * Extracts file name from HTTP header content-disposition
+     * Extrae el nombre del archivo desde HTTP header content-disposition
+     * @param:part / archivo dentro del content-disposition
+     * @return String / Nombre del archivo del cliente
      */
     private String extractFileName(Part part) {
     	for (String cd : part.getHeader("content-disposition").split(";")) {

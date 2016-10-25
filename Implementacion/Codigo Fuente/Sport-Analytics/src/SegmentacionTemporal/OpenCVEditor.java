@@ -16,6 +16,8 @@ import org.opencv.core.MatOfInt;
 import org.opencv.highgui.VideoCapture;
 import org.opencv.imgproc.Imgproc;
 
+import Excepciones.ErrorEditor;
+
 public class OpenCVEditor implements VideoEditor{
 	
 	public OpenCVEditor(){}
@@ -59,20 +61,21 @@ public class OpenCVEditor implements VideoEditor{
 	}
 	
 	/**
-	 * Realiza la deteccion de frames del video completo y lo guarda en una
+	 * Realiza la detección de frames del video completo y lo guarda en una
 	 * lista de tipo Mat
 	 *
 	 * @param  		nombrevideo - Un string con el nombre del video.
-	 * @return      listaFrames - Una lista de tipo Mat, con todos los frames del video.
+	 * @return  ArrayList<Mat>  matriz con los frames obtenidos. 
+	 * @throws ErrorEditor 
 	*/
-	public ArrayList<Mat> obtenerFrames(String nombrevideo){
+	public ArrayList<Mat> obtenerFrames(String nombrevideo) throws ErrorEditor{
 		
 		ArrayList<Mat> listaFrames = new ArrayList<>();
 		VideoCapture video = new VideoCapture(nombrevideo);
 		
-		
+		try{
 		if(!video.isOpened()){
-			System.out.println("Error: abriendo el video");
+			throw new Exception("Error abriendo el video");
 		} else {
 			
 	    		Mat frame = new Mat();
@@ -86,6 +89,10 @@ public class OpenCVEditor implements VideoEditor{
 		}
 		
 		return listaFrames;
+		}
+		catch(Exception e){
+			throw new ErrorEditor(e.getMessage());
+		} 
 	}
 	
 	/**

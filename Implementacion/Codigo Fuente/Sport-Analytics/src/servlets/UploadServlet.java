@@ -16,6 +16,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.opencv.core.Core;
 
+import Excepciones.ErrorEditor;
+import Excepciones.ErrorJson;
 import SegmentacionTemporal.ControladorSegmentador;
 
 /**
@@ -45,9 +47,11 @@ public class UploadServlet extends HttpServlet {
 	//static{System.loadLibrary("C:\\Users\\Katerine\\Documents\\openCV\\opencv\\build\\java\\x64\\opencv_java2413.dll");}
     /**
      * handles file upload
+     * @throws IOException 
+     * @throws ServletException 
      */
     protected void doPost(HttpServletRequest request,
-            HttpServletResponse response) {
+            HttpServletResponse response) throws IOException, ServletException {
     	System.load("C:\\Users\\Katerine\\Documents\\openCV\\opencv\\build\\java\\x64\\opencv_java2413.dll");
         // gets absolute path of the web application
         //String appPath = request.getServletContext().getRealPath("");
@@ -59,9 +63,13 @@ public class UploadServlet extends HttpServlet {
         if (!fileSaveDir.exists()) {
             fileSaveDir.mkdir();
         }
-         
+        /*Variables utilizadas en los bloques*/
         String filePath ="";
-        try {
+        JSONObject jsResultado;
+        String cortes =" ";
+        String resultado=null;
+        
+        /*obtiene los datos del cliente*/
 			for (Part part : request.getParts()) {
 			    fileName = extractFileName(part);
 			    part.write(savePath + File.separator + fileName);
@@ -71,37 +79,41 @@ public class UploadServlet extends HttpServlet {
 			    
 			}
 			/*Procesar el video cargado*/
-			String cortes =" ";
+			
 			ControladorSegmentador controlador = new ControladorSegmentador();
-			cortes = controlador.generarArchivoCortes(filePath);
-			System.out.println(cortes);
+			try {
+				cortes = controlador.generarArchivoCortes(filePath);
+			} catch (ErrorJson | ErrorEditor e) {
+				throw new ServletException(e.getMessage());
+			}
+			//System.out.println(cortes);(DEBUG)
+			
 			/* ....... Final de proceso de generación*/
 			
 			// Procesar el archivo para agregar el nombre del video
-			JSONParser parser = new JSONParser();
-			JSONObject jsResultado = (JSONObject) parser.parse(cortes);
+			
+			try {
+				JSONParser parser = new JSONParser();
+				jsResultado = (JSONObject) parser.parse(cortes);
+				jsResultado.put("video", fileName);
+				resultado = jsResultado.toJSONString();
+			} catch (ParseException e) {
+				throw new ServletException(e.getMessage());
+			}
 	
-			jsResultado.put("video", fileName);
-			String resultado = jsResultado.toJSONString();
-			
-			
+
 			//Envia el JSON
 			PrintWriter out = response.getWriter();
 		    out.append(resultado);
-		    
-		} catch (IOException | ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		    }
         
-    }
+ 
  
     /**
      * Extracts file name from HTTP header content-disposition
+     * Extrae el nombre del archivo desde HTTP header content-disposition
+     * @param:part / archivo dentro del content-disposition
+     * @return String / Nombre del archivo del cliente
      */
     private String extractFileName(Part part) {
     	for (String cd : part.getHeader("content-disposition").split(";")) {

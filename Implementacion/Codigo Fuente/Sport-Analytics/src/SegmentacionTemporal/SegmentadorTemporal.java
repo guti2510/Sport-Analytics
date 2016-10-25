@@ -10,6 +10,9 @@ import org.json.simple.JSONObject;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
+import Excepciones.ErrorEditor;
+import Excepciones.ErrorJson;
+
 
 /**
  * @author Grupo 5 - Aseguramiento de la Calidad del Software
@@ -161,40 +164,46 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 	 * va creando una lista con los histogramas normalizados.
 	 * 
 	 * @param  	 nombrevideo - Un string con el nombre del video
+	 * @throws ErrorEditor 
 	*/
-	public void detectarCortes(String nombrevideo){
+	public void detectarCortes(String nombrevideo) throws ErrorEditor{
 		
-		this.rawFrame = openCvEdit.obtenerFrames(nombrevideo);
-		ArrayList<Mat> listaHist = new ArrayList<>();
-	
-		for(int indice = 0; indice < rawFrame.size(); indice++){
+		try {
+			this.rawFrame = openCvEdit.obtenerFrames(nombrevideo);
+			ArrayList<Mat> listaHist = new ArrayList<>();
+			
+			for(int indice = 0; indice < rawFrame.size(); indice++){
 
-	    		/*	Transformacion del RGB a HSV	*/
-	    	    Mat hsv = new Mat();
-	    	    hsv = openCvEdit.transformarHSV(this.rawFrame.get(indice));
-	    	      	        
-	    	    /*	Separa la capa de H de las demas	*/
-	    	    Mat capaH = new Mat();
-	    	    capaH = openCvEdit.extraerCapaH(hsv);
-	    	    
-	    	    /*	Calcula el histograma de la capa H	*/
-	    	    Mat histograma = openCvEdit.calcularHistograma(capaH);
-	    	    
-	    	    /*	Normaliza los histogramas	*/
-				for(int fila = 0; fila < histograma.total(); fila++){
-					histograma.put(fila, 0, (histograma.get(fila, 0)[0] / capaH.total()));
-				}
+		    		/*	Transformacion del RGB a HSV	*/
+		    	    Mat hsv = new Mat();
+		    	    hsv = openCvEdit.transformarHSV(this.rawFrame.get(indice));
+		    	      	        
+		    	    /*	Separa la capa de H de las demas	*/
+		    	    Mat capaH = new Mat();
+		    	    capaH = openCvEdit.extraerCapaH(hsv);
+		    	    
+		    	    /*	Calcula el histograma de la capa H	*/
+		    	    Mat histograma = openCvEdit.calcularHistograma(capaH);
+		    	    
+		    	    /*	Normaliza los histogramas	*/
+					for(int fila = 0; fila < histograma.total(); fila++){
+						histograma.put(fila, 0, (histograma.get(fila, 0)[0] / capaH.total()));
+					}
 
-	    	    listaHist.add(histograma);
+		    	    listaHist.add(histograma);
+		    	    
+		    	    //dibujarHistograma(histograma, 800, 800);
+		    	}
+		    	
+	    	    ArrayList<Double> listaBhata = calcularSimilitudHist(listaHist);
 	    	    
-	    	    //dibujarHistograma(histograma, 800, 800);
-	    	}
-	    	
-    	    ArrayList<Double> listaBhata = calcularSimilitudHist(listaHist);
-    	    
-    	    clasificarFrames(listaBhata);	
+	    	    clasificarFrames(listaBhata);	
+			
+			//System.out.println("Done");
+		} catch (ErrorEditor e) {
+			throw e;
+		}
 		
-		System.out.println("Done");
     	
 	}
 	
@@ -248,7 +257,7 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 		}
 		InfoReporte reporte = new InfoReporte(cantFalPositvos, cantFalNegativos, pLista.size());
 		
-		System.out.println("Cantidad de Falso positivo: " + cantFalPositvos + " Falso negativos: " + cantFalNegativos);
+		//System.out.println("Cantidad de Falso positivo: " + cantFalPositvos + " Falso negativos: " + cantFalNegativos);
 		
 		return reporte;
 	}
@@ -258,9 +267,9 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 	 * segun el analisis realizado al video.
 	 * 
 	 * @return   El retorno es null, ya que solo crear el archivo con la informacion.
-	 * @throws Exception 
+	 * @throws ErrorJson 
 	*/
-	public String generarArchivo(){
+	public String generarArchivo() throws ErrorJson{
 		   
 		  try {
 
@@ -295,10 +304,9 @@ public class SegmentadorTemporal implements AlgoritmoSegmentacion{
 		    return objetoprincipal.toJSONString();
 		    
 		    } catch (IOException e) {
-		    	System.out.println(e.getMessage());
+		    	e.printStackTrace();
+		    	throw new ErrorJson("Error abriendo en la generación de archivo JSON");
 		    }
-		  
-		  	return null;
 		 }
 	
 	

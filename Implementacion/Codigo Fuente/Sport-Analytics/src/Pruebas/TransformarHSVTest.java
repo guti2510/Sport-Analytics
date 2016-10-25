@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
+import Excepciones.ErrorEditor;
 import SegmentacionTemporal.OpenCVEditor;
 import SegmentacionTemporal.VideoEditor;
 
@@ -28,7 +29,11 @@ public class TransformarHSVTest {
 		
 		ArrayList<Mat> rawFrame = new ArrayList<>();
 		
-		rawFrame = openCvEdit.obtenerFrames("Video.MP4");
+		try {
+			rawFrame = openCvEdit.obtenerFrames("Video.MP4");
+		} catch (ErrorEditor e) {
+			e.printStackTrace();
+		}
 		ArrayList<Mat> listaHist = new ArrayList<>();
 		
 		/*	PROBAMOS LA: Transformacion del RGB a HSV	*/

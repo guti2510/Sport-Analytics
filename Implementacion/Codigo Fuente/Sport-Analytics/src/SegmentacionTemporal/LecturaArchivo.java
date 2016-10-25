@@ -4,6 +4,7 @@ package SegmentacionTemporal;
  * 			-Juan Jose Gutierrez J
  * 			-Alexander Sanchez B
  * 			-Katerine Molina
+ * @version 2.0.0
  *
  */
 import java.io.FileNotFoundException;
@@ -16,6 +17,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import Excepciones.ErrorJson;
+
 public class LecturaArchivo {
 	
 	/**
@@ -24,9 +27,10 @@ public class LecturaArchivo {
 	 * 
 	 * @param  	 pNombreGroud - Un string con el nombre del archivo de groundtruth
 	 * @return   ListaFrames - Una lista de clases de tipo InfoFrame con los datos del groundtruth
+	 * @throws ErrorJson 
 	 * 
 	*/
-	public ArrayList<InfoFrame> leerArchivo(String pNombreGroud) throws IOException, ParseException{
+	public ArrayList<InfoFrame> leerArchivo(String pNombreGroud) throws IOException, ParseException, ErrorJson{
 		
 		ArrayList<InfoFrame> ListaFrames = new ArrayList<InfoFrame>();
 		
@@ -57,9 +61,8 @@ public class LecturaArchivo {
 			}
 	
 			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new ErrorJson("Archivo no encontrado o erróneo");
 		}
         
         

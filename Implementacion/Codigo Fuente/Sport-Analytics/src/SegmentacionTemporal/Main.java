@@ -15,11 +15,18 @@ public class Main {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
 		ControladorSegmentador controlador = new ControladorSegmentador();
-		String archvivo = controlador.generarArchivoCortes("src/Video.MP4");
-		System.out.println(archvivo);
+		//String archvivo = controlador.generarArchivoCortes("F:\\Cursos\\II Semestre 2016\\Aseguramiento de software\\Proyectos\\Sport-Analytics\\Implementacion\\Codigo Fuente\\Sport-Analytics\\Video.mp4");
+		//System.out.println(archvivo);
 		
-		String reporte = controlador.comprarGround("src/Video.MP4", "Groundtruth.json");
-		System.out.println(reporte);
+		String reporte;
+		try {
+			reporte = controlador.comprarGround("Video.MP4", "Groundtruth.json");
+			System.out.println(reporte);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 	}
 

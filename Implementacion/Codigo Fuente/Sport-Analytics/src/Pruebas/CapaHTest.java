@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
+import Excepciones.ErrorEditor;
 import SegmentacionTemporal.OpenCVEditor;
 import SegmentacionTemporal.VideoEditor;
 
@@ -29,7 +30,11 @@ public class CapaHTest {
 		
 		ArrayList<Mat> rawFrame = new ArrayList<>();
 		
-		rawFrame = openCvEdit.obtenerFrames("Video.MP4");
+		try {
+			rawFrame = openCvEdit.obtenerFrames("Video.MP4");
+		} catch (ErrorEditor e) {
+			e.printStackTrace();
+		}
 		ArrayList<Mat> listaHist = new ArrayList<>();
 		
 		/*	Transformacion del RGB a HSV	*/
